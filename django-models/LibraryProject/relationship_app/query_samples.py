@@ -1,8 +1,8 @@
 from .models import Author, Book, Library, Librarian
 
 try:
-    author = Author.objects.get(name="John Doe")
-    books_by_author = Book.objects.filter(name=author_name)
+    author = Author.objects.get(name=author_name)
+    books_by_author = Author.objects.filter(name=author)
     print(f"Books by {author}:")
     for book in books_by_author:
         print(f"- {book}")
