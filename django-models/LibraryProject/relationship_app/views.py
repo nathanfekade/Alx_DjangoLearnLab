@@ -8,5 +8,5 @@ def list_books(request):
     context = {
         'books': books,
     }
-    return render(request, 'relationship_app/book_list.html', context)
+    return render(request, 'relationship_app/list_books.html', context)
 # class Library(ListView):
