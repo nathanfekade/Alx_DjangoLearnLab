@@ -9,4 +9,15 @@ def list_books(request):
         'books': books,
     }
     return render(request, 'relationship_app/list_books.html', context)
-# class Library(ListView):
+
+class LibraryDetailView(DetailView):
+    model = Library
+    template_name = 'relationship_app/library_detail.html'
+    context_object_name = 'library'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation to get the context
+        context = super().get_context_data(**kwargs)
+        # Add the list of books for this library
+        context['books'] = self.object.books.all()
+        return context
