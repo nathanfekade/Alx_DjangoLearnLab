@@ -19,7 +19,7 @@ except Library.DoesNotExist:
     print("Library 'Central Library' not found")
 
 try:
-    library = Librarian.objects.get(Library=library_name)
+    library = Librarian.objects.get(library=library_name)
     librarian = library.librarian
     print(f"Librarian for {library}:")
     print(f"- {librarian}")
