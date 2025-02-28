@@ -39,6 +39,7 @@ def register(request):
     return render(request, 'relationship_app/register.html', {'form': form})
 UserCreationForm()
 
+@user_passes_test
 def check_role(role):
     def role_check(user):
         if not user.is_authenticated:
@@ -50,17 +51,14 @@ def check_role(role):
             return False
     return user_passes_test(role_check)
 
-# Admin view
 @check_role('Admin')
 def admin_view(request):
     return render(request, 'relationship_app/admin_view.html', {'message': 'Welcome, Admin!'})
 
-# Librarian view
 @check_role('Librarian')
 def librarian_view(request):
     return render(request, 'relationship_app/librarian_view.html', {'message': 'Welcome, Librarian!'})
 
-# Member view
 @check_role('Member')
 def member_view(request):
     return render(request, 'relationship_app/member_view.html', {'message': 'Welcome, Member!'})
