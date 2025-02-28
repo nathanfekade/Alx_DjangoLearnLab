@@ -2,7 +2,7 @@ from .models import Author, Book, Library, Librarian
 
 try:
     author = Author.objects.get(name="John Doe")
-    books_by_author = Book.objects.filter(author=author)
+    books_by_author = Book.objects.filter(author=author_name)
     print(f"Books by {author}:")
     for book in books_by_author:
         print(f"- {book}")
