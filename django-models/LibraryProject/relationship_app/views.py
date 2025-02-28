@@ -81,3 +81,10 @@ def librarian_view(request):
 @check_role('Member')
 def member_view(request):
     return render(request, 'relationship_app/member_view.html', {'message': 'Welcome, Member!'})
+@permission_required('relationship_app.can_delete_book', raise_exception=True)
+def delete_book(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    if request.method == 'POST':
+        book.delete()
+        return redirect('booklist')
+    return render(request, 'relationship_app/delete_book.html', {'book': book, 'message': 'Confirm deletion of the book:'})
