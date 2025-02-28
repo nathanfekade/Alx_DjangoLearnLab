@@ -4,6 +4,9 @@ from django.views.generic.detail import DetailView
 from .models import Library
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import CreateView
+from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 
 def list_books(request):
     books = Book.objects.all()
@@ -23,5 +26,14 @@ class LibraryDetailView(DetailView):
         # Add the list of books for this library
         context['books'] = self.object.books.all()
         return context
-    
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # return redirect('login')  # Redirect to login after successful registration
+    else:
+        form = UserCreationForm()
+    return render(request, 'relationship_app/register.html', {'form': form})
 UserCreationForm()
