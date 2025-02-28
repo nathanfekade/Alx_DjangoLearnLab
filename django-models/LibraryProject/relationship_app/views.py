@@ -23,3 +23,5 @@ class LibraryDetailView(DetailView):
         # Add the list of books for this library
         context['books'] = self.object.books.all()
         return context
+    
+UserCreationForm()
