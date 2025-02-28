@@ -10,7 +10,7 @@ except Author.DoesNotExist:
     print("Author 'John Doe' not found")
 
 try:
-    library = Library.objects.get(name="Central Library")
+    library = Library.objects.get(name=library_name)
     books_in_library = library.books.all()  
     print(f"Books in {library}:")
     for book in books_in_library:
@@ -19,7 +19,7 @@ except Library.DoesNotExist:
     print("Library 'Central Library' not found")
 
 try:
-    library = Library.objects.get(name="Central Library")
+    library = Library.objects.get(name=library_name)
     librarian = library.librarian
     print(f"Librarian for {library}:")
     print(f"- {librarian}")
