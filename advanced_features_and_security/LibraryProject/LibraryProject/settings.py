@@ -133,3 +133,12 @@ X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+
+#redirect all http to https
+SECURE_SSL_REDIRECT = True
+# enforce https for 1 year
+SECURE_HSTS_SECONDS = 31536000
+# apply hsts on subdomains
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#allow hsts preload listing
+SECURE_HSTS_PRELOAD = True
