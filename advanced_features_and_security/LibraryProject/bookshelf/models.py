@@ -10,7 +10,7 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self. model(username = username, email=email, **extra_fields)
         user.set_password(password)
-        user.sace(using= self._db)
+        user.save(using= self._db)
         return user
     
     def create_superuser(self, username, email=None, password=None, **extra_fields):
@@ -38,3 +38,12 @@ class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
     publication_year = models.IntegerField()
+
+    class Meta:
+        permissions = (
+            ("can_view", "Can view book"),
+            ("can_create", "Can create book"),
+            ("can_edit", "Can edit book"),
+            ("can_delete", "Can delete book"),
+            
+        )
