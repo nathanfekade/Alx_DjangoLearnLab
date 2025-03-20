@@ -10,7 +10,7 @@ class BookListView(generics.ListAPIView):
 class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    lookup_field = 'title'
+    lookup_field = 'pk'
 
 class BookCreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
@@ -19,9 +19,9 @@ class BookCreateView(generics.CreateAPIView):
 class BookUpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    lookup_field = 'title'
+    lookup_field = 'pk'
 
 class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    lookup_field = 'title'    
+    lookup_field = 'pk'    
