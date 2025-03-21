@@ -4,7 +4,7 @@ from .models import Book
 from .serializers import BookSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework import filters
-from django_filter import rest_framework
+from django_filters import rest_framework
 # import django_filters.rest_framework
 
 
