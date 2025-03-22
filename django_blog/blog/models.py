@@ -13,3 +13,7 @@ class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
+
+class Tag(models.Model):
+    name = models.CharField(max_length=100)
+    post = models.ManyToManyField(Post)
