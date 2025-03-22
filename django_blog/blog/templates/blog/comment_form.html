@@ -1,14 +1,14 @@
 {% extends 'blog/base.html' %}
 {% load static %}
 
-{% block title %}Edit Comment{% endblock %}
+{% block title %}{% if form.instance.pk %}Edit Comment{% else %}New Comment{% endif %}{% endblock %}
 
 {% block content %}
-    <h1>Edit Comment</h1>
+    <h1>{% if form.instance.pk %}Edit Comment{% else %}New Comment{% endif %}</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save Changes</button>
+        <button type="submit">Save</button>
     </form>
-    <p><a href="{% url 'post_detail' object.post.pk %}">Cancel</a></p>
+    <p><a href="{% url 'post_detail' object.post.pk|default:request.resolver_match.kwargs.post_pk %}">Cancel</a></p>
 {% endblock %}
