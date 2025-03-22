@@ -7,9 +7,37 @@
     <h1>{{ post.title }}</h1>
     <p>{{ post.content }}</p>
     <p>Posted by {{ post.author }} on {{ post.published_date }}</p>
-    {% if user == post.author %}
+    {% if user.is_authenticated and user == post.author %}
         <a href="{% url 'post_edit' post.pk %}">Edit</a> |
         <a href="{% url 'post_delete' post.pk %}">Delete</a>
     {% endif %}
-    <p><a href="{% url 'post_list' %}">Back to Posts</a></p>
+    <p><a href="{% url 'base' %}">Back to Posts</a></p>
+
+    <h2>Comments</h2>
+    {% for comment in comments %}
+        <div class="comment">
+            <p>{{ comment.content }}</p>
+            <p>By {{ comment.author }} on {{ comment.created_at }}</p>
+            {% if comment.updated_at != comment.created_at %}
+                <p><small>Edited on {{ comment.updated_at }}</small></p>
+            {% endif %}
+            {% if user.is_authenticated and user == comment.author %}
+                <a href="{% url 'comment_edit' comment.pk %}">Edit</a> |
+                <a href="{% url 'comment_delete' comment.pk %}">Delete</a>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <h3>Add a Comment</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit">Submit Comment</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Login</a> to add a comment.</p>
+    {% endif %}
 {% endblock %}
