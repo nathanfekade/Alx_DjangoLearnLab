@@ -183,7 +183,7 @@ class SearchResultsView(ListView):
         context['posts'] = Post.objects.all().order_by('-published_date')  
         return context
 
-class TagPostListView(ListView):
+class PostByTagListView(ListView):
     model = Post
     template_name = 'blog/tag_posts.html'
     context_object_name = 'posts'
