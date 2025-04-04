@@ -11,8 +11,8 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('followers',)
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True)
-    password2 = serializers.CharField(write_only=True, required=True, label='confirm password')
+    password = serializers.CharField()
+    password2 = serializers.CharField()
 
     class Meta:
         model = get_user_model()
