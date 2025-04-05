@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, get_user_model
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import generics
 from .models import CustomUser
@@ -36,7 +36,7 @@ class LoginView(APIView):
         
 class ProfileView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         user = request.user
@@ -45,7 +45,7 @@ class ProfileView(APIView):
 
 class FollowUserView(generics.GenericAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
@@ -61,7 +61,7 @@ class FollowUserView(generics.GenericAPIView):
 
 class UnfollowUserView(generics.GenericAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
