@@ -8,6 +8,9 @@ from rest_framework import permissions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import generics
 from .models import CustomUser
+from notifications.models import Notification
+from django.contrib.contenttypes.models import ContentType
+
 
 class RegisterView(APIView):
     def post(self, request):
@@ -54,6 +57,13 @@ class FollowUserView(generics.GenericAPIView):
             if user_to_follow == request.user:
                 return Response({"detail": "cannot follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
             request.user.following.add(user_to_follow)
+            Notification.objects.create(
+                recipient = user_to_follow,
+                actor= request.user,
+                verb="followed",
+                target_content_type=ContentType.objects.get_for_model(CustomUser),
+                target_object_id= user_to_follow.id
+            )
             return Response({"detail": f"following {user_to_follow.username}"}, status=status.HTTP_200_OK)
         except get_user_model().DoesNotExist:
             return Response({"detail": "user not found"}, status=status.HTTP_404_NOT_FOUND)
@@ -73,5 +83,3 @@ class UnfollowUserView(generics.GenericAPIView):
             return Response({"detail": f"Unfollowed {user_to_unfollow.username}"}, status=status.HTTP_200_OK)
         except get_user_model.DoesNotExist:
             return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-        
-        
