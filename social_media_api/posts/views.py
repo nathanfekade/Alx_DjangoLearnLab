@@ -10,6 +10,7 @@ from .models import Post,Comment
 from rest_framework import status
 from notifications.models import Notification
 from django.contrib.contenttypes.models import ContentType
+from rest_framework import generics
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -57,31 +58,26 @@ class LikePostView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, post_id):
-        try:
-            post = Post.objects.get(id=post_id)
+    def post(self, request, pk):
+        
+        post = generics.get_object_or_404(Post, pk=pk)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
 
-            if Like.objects.create(user=request.user, post=post).exists():
-                return Response({"detail": "post already liked"}, status=status.HTTP_400_BAD_REQUEST)
-            
-            like = Like.objects.create(user=request.user, post=post)
-            Notification.objects.create(recipient=post.author, actor=request.user, verb='liked', target_content_type=ContentType.objects.get_for_model(Post), target_object_id=post.id)
-            return Response({"detail": "Post liked"}, status=status.HTTP_201_CREATED)
-        except Post.DoesNotExist:
-            return Response({"detail": "post not found"}, status=status.HTTP_404_NOT_FOUND)
-
+        if not created:
+            return Response({"detail": "post is already liked"}, status=status.HTTP_400_BAD_REQUEST)
+        Notification.objects.create(recipient=post.author, actor=request.user, verb='liked', target_content_type=ContentType.objects.get_for_model(Post), target_object_id=post.id)
+        return Response({"detail": "Post liked"}, status=status.HTTP_201_CREATED)
+        
 class UnlikePostView(APIView):
     authentication_classes= [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, post_id):
-        try:
-            post = Post.objects.get(id=post_id)
-            like = Like.objects.filter(user=request.user, post=post).first()
+    def post(self, request, pk):
+    
+        post = generics.get_object_or_404(Post, pk=pk)
+        like = Like.objects.filter(user=request.user, post=post).first()
 
-            if not like:
-                return Response({"detail": "post is already not liked"}, status=status.HTTP_400_BAD_REQUEST)
-            like.delete()
-            return Response({"detail": "Post unliked"}, status=status.HTTP_200_OK)
-        except Post.DoesNotExist:
-            return Response({"detail": "post not found"}, status=status.HTTP_404_NOT_FOUND)
+        if not like:
+            return Response({"detail": "post is already not liked"}, status=status.HTTP_400_BAD_REQUEST)
+        like.delete()
+        return Response({"detail": "Post unliked"}, status=status.HTTP_200_OK)
