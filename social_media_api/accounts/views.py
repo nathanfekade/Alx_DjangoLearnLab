@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, get_user_model
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import generics
+from .models import CustomUser
 
 class RegisterView(APIView):
     def post(self, request):
@@ -41,9 +43,10 @@ class ProfileView(APIView):
         serialzier = UserSerializer(user)
         return Response(serialzier.data, status=status.HTTP_200_OK)
 
-class FollowUserView(APIView):
+class FollowUserView(generics.GenericAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
         try:
@@ -56,9 +59,10 @@ class FollowUserView(APIView):
             return Response({"detail": "user not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-class UnfollowUserView(APIView):
+class UnfollowUserView(generics.GenericAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
         try:
